@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jboss.fuse.quickstarts</groupId>
+	<artifactId>camel-jms</artifactId>
+	<version>7.0.0.fuse-000191-redhat-1</version>
+
+	<packaging>bundle</packaging>
+
+	<name>Red Hat Fuse :: Quickstarts :: camel-jms</name>
+	<description>Camel JMS Example</description>
+	<url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-jms</url>
+
+	<properties>
+		<my.fuse.dir.home>j:/devtools/fuse-karaf-7.0.0.fuse-000191-redhat-1</my.fuse.dir.home>
+	</properties>
+
+	<dependencies>
+		<!-- For this example, we will be using the OSGi Blueprint XML syntax for 
+			Apache Camel. -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-blueprint</artifactId>
+			<version>2.21.0.fuse-000077-redhat-1</version>
+		</dependency>
+
+		<!-- AMQ 7 Broker connectivity for Camel -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jms</artifactId>
+			<version>2.21.0.fuse-000077-redhat-1</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<!-- Core plugins -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>3.5.0</version>
+				<inherited>true</inherited>
+				<extensions>true</extensions>
+				<configuration>
+					<obrRepository>NONE</obrRepository>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<target>
+							 	<property name="fuseHome" value="${my.fuse.dir.home}"/>
+							 	<echo message="Custom fuseHome Property is: ${fuseHome}"/>
+								<delete file="${fuseHome}\deploy\camel-jms.jar" />
+								<copy file="./target/camel-jms.jar"
+									tofile="${fuseHome}\deploy\camel-jms.jar" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>
